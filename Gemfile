@@ -5,6 +5,10 @@ gem 'rails', '3.1.0'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
+gem 'bson_ext'
+gem 'mongo'
+gem 'mongo_mapper'
+
 gem 'mysql2'
 
 gem 'json'
