@@ -4,10 +4,12 @@ class MonitorConfig
   one :task, :class_name => "MonitorConfigTask"
   
   def self.next_task options
-    task = MonitorConfig.where('task.next_scheduled_at' => { "$lt" => Time.now.utc }, :browser => options[:browsers], 'task.next_scheduled_location' => options[:location] ).first
+    task = MonitorConfig.where('task.next_scheduled_at' => { "$lt" => Time.now.utc }, :browser => options['b'], 'task.next_scheduled_location' => options['l'] ).first
     if task
       task.after_scheduled
-      task.as_task
+      [task.as_task]
+    else
+      []
     end
   end
   
@@ -17,7 +19,7 @@ class MonitorConfig
   end
   
   def as_task
-    { :url => url, :browser => browser, :bandwidth => bandwidth }
+    { :url => url, :browser => browser, :bandwidth => {:bwDown => bandwidth}, :indexId => BSON::ObjectId.new, :operations => 'webpage', :bundle => false }
   end
   
   def after_scheduled

@@ -1,0 +1,44 @@
+%form
+  Show
+  %select
+    %option DNS Time
+    %option Connection Time
+    %option Time to Title 
+    %option Time to Display
+    %option Time to Interact
+    %option First Paint 
+  for samples from
+  %select 
+    %option Boston
+    %option Singapore 
+    %option Tokyo 
+    %option London 
+  between
+  and
+  %input{:type => 'submit', :value => 'Update'} 
+
+%table{:border => 1}
+  %thead
+    %tr
+      %th Location 
+      %th URL
+      %th Bindwidth
+      %th Browser
+      %th Time_to_display 
+      %th Time_to_title
+      %th Time_to_interact
+      %th First_paint
+      %th Edit
+  %tbody
+    - @samples.each do |sample|
+      %tr
+        %td #{sample.location}
+        %td #{sample.url}
+        %td #{sample.bandwidth}
+        %td #{sample.browser}
+        %td #{sample.time_to_display}
+        %td #{sample.time_to_title}
+        %td #{sample.time_to_interact}
+        %td #{sample.first_paint}
+        %td 
+
