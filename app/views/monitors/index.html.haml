@@ -1,0 +1,28 @@
+- if @monitors
+  %table{:border => 1}
+    %thead
+      %tr
+        %th Name
+        %th URL
+        %th Frequency
+        %th Browser
+        %th Locations
+        %th Show
+        %th Edit
+    %tbody
+      - @monitors.each do |monitor|
+        %tr
+          %td #{monitor.name}
+          %td #{monitor.url}
+          %td #{monitor.frequency}
+          %td #{monitor.browser}
+          %td #{monitor.locations.join(',')}
+          %td 
+            = link_to "Show", monitor_path(monitor)
+          %td 
+            = link_to "Edit", edit_monitor_path(monitor)
+- else
+  There is no monitors now.
+
+= link_to "add monitor", new_monitor_path
+    
