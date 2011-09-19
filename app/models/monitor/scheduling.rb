@@ -7,4 +7,6 @@ class MonitorConfig
     self.task = MonitorConfigTask.new(:next_scheduled_location => locations.first, :next_scheduled_at => Time.now.utc)
     self.save
   end
+  
+  
 end
