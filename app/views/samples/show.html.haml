@@ -13,13 +13,13 @@
     %option Singapore 
     %option Tokyo 
     %option London 
-  between
-  and
+  = render '/shared/date_picker' 
   %input{:type => 'submit', :value => 'Update'} 
 
 %table{:border => 1}
   %thead
     %tr
+      %th Time
       %th Location 
       %th URL
       %th Bindwidth
@@ -32,6 +32,7 @@
   %tbody
     - @samples.each do |sample|
       %tr
+        %td #{sample.timestamp}
         %td #{sample.location}
         %td #{sample.url}
         %td #{sample.bandwidth}

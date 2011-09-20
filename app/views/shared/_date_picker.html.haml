@@ -1,0 +1,41 @@
+%cite{ 'data-name' => 'module', 'data-value' => 'datePickers', :style => 'display: none;' }> date pickers
+.date_pickers.corner_all_8
+  .qtip-borderTop
+    %div{ :rel => "topLeft"}
+    %div{ :rel => "topRight"}
+    .qtip-betweenCorners
+  .qtip-contentWrapper
+    %div{:rel => "centerLeft"}
+    %div{:rel => "centerRight"}
+    .qtip-content
+      viewing data for
+      %span.corner_all_2{ :name => 'date', :value => 'start' } 
+        %label #{30.days.ago.utc.to_date.strftime("%m/%d/%Y")}
+      to
+      %span.corner_all_2{ :name => 'date', :value => 'end' } 
+        %label #{Time.now.utc.to_date.strftime("%m/%d/%Y")}
+    .date_picker_body
+      %ul.quick_dates.left
+        %li.quick_date 
+          %span.square
+          %a{ :href => "javascript: void(0);", :date_start => '-7', :date_end => '-1' } last 7 days
+        %li.quick_date
+          %span.square
+          %a{ :href => "javascript: void(0);", :date_start => '-1 {1}', :date_end => '{0}' } previous month
+        %li.quick_date
+          %span.square
+          %a{ :href => "javascript: void(0);", :date_start => '{1}' } month to date
+        %li.quick_date
+          %span.square
+          %a{ :href => "javascript: void(0);", :date_start => '{0} {1}' } year to date
+      .date_picker.right{ :date_for => 'end' }
+      .date_picker.right{ :date_for => 'start' }
+      .clear
+    .date_picker_actions
+      %a{ :href => 'javascript: void(0)', :rel => 'cancel' } cancel
+      %a.corner_all_2{ :href => 'javascript: void(0)', :rel => 'update' } update
+      
+  .qtip-borderBottom{:dir => "ltr" }
+    %div{:rel => "bottomLeft"}
+    %div{:rel => "bottomRight"}
+    .qtip-betweenCorners

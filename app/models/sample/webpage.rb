@@ -12,7 +12,7 @@ module Sample
     key :time_to_interact
     key :first_paint
 
-    key :timestamp, Time
+    key :timestamp, Integer 
 
     key :yottaa_score, Integer
 
