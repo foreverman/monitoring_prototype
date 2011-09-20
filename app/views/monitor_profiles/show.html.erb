@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @monitor_profile.name %>
+</p>
+
+<p>
+  <b>Url:</b>
+  <%= @monitor_profile.url %>
+</p>
+
+<p>
+  <b>Frequency:</b>
+  <%= @monitor_profile.frequency %>
+</p>
+
+<p>
+  <b>Network connectivity:</b>
+  <%= @monitor_profile.network_connection.description %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @monitor_profile.user_id %>
+</p>
+
+<p>
+  <b>Browser:</b>
+  <%= @monitor_profile.browser.description %>
+</p>
+
+<p>
+  <b>Locations:</b>
+  <%= @monitor_profile.locations.map(&:name).join(',') %>
+</p>
+
+<%= link_to 'Edit', edit_monitor_profile_path(@monitor_profile) %> |
+<%= link_to 'Back', monitor_profiles_path %>

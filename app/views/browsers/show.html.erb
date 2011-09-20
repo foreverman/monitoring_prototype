@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @browser.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @browser.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_browser_path(@browser) %> |
+<%= link_to 'Back', browsers_path %>

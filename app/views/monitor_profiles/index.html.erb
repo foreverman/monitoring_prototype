@@ -1,0 +1,35 @@
+<h1>Listing monitor_profiles</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Url</th>
+    <th>Frequency</th>
+    <th>Network connectivity</th>
+    <th>User</th>
+    <th>Browser</th>
+    <th>Locations</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @monitor_profiles.each do |monitor_profile| %>
+  <tr>
+    <td><%= monitor_profile.name %></td>
+    <td><%= monitor_profile.url %></td>
+    <td><%= monitor_profile.frequency %></td>
+    <td><%= monitor_profile.network_connection.description %></td>
+    <td><%= monitor_profile.user_id %></td>
+    <td><%= monitor_profile.browser.description %></td>
+    <td><%= monitor_profile.locations.map(&:name).join(',') %></td>
+    <td><%= link_to 'Show', monitor_profile %></td>
+    <td><%= link_to 'Edit', edit_monitor_profile_path(monitor_profile) %></td>
+    <td><%= link_to 'Destroy', monitor_profile, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Monitor profile', new_monitor_profile_path %>

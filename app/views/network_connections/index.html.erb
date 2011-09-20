@@ -1,0 +1,21 @@
+<h1>Listing network_connections</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @network_connections.each do |network_connection| %>
+  <tr>
+    <td><%= link_to 'Show', network_connection %></td>
+    <td><%= link_to 'Edit', edit_network_connection_path(network_connection) %></td>
+    <td><%= link_to 'Destroy', network_connection, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Network connection', new_network_connection_path %>

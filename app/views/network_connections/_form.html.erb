@@ -1,0 +1,17 @@
+<%= form_for(@network_connection) do |f| %>
+  <% if @network_connection.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@network_connection.errors.count, "error") %> prohibited this network_connection from being saved:</h2>
+
+      <ul>
+      <% @network_connection.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
