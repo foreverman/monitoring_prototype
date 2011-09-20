@@ -11,7 +11,7 @@ class SamplesController < ApplicationController
     body_str = request.body.read
     body_hash = ActiveSupport::JSON.decode(body_str)
     sample = Sample.from_http(params, body_hash)
-    sample.save
+    sample.store
     render :json => {:code => 'OK', :tasks => []}, :status => 200
   end
 
