@@ -2,6 +2,8 @@ module Sample
   class Webpage 
     include MongoMapper::Document
 
+    belongs_to :monitor_config
+
     key :url,      String
     key :location, String
     key :browser,  String
@@ -11,6 +13,8 @@ module Sample
     key :time_to_title
     key :time_to_interact
     key :first_paint
+
+    validates_presence_of :url, :location, :browser, :bandwidth, :monitor_config_id
 
     key :timestamp, Integer 
 
@@ -89,5 +93,10 @@ module Sample
       body['error']['meta-data']
     end
 
+    def store
+      if save
+        WebpageDaily.store(self)
+      end
+    end
   end
 end
