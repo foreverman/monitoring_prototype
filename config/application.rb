@@ -46,3 +46,4 @@ module Monitoring
     config.assets.version = '1.0'
   end
 end
+require 'string'

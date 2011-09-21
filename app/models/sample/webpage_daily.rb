@@ -32,12 +32,9 @@ module Sample
       }
       self.collection.update(
         {
-          :url => webpage.url, 
           :monitor_config_id => webpage.monitor_config_id, 
           :location => webpage.location,
-          :browser => webpage.browser,
-          :bandwidth => webpage.bandwidth,
-          :timestamp => Time.at(webpage.timestamp).beginning_of_day.to_i
+          :timestamp => Time.at(webpage.timestamp).utc.beginning_of_day.to_i
         },
         {'$inc' => inc},
         :upsert => true
