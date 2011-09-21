@@ -23,6 +23,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'SystemTimer',  :require => 'system_timer'
 
 # Use unicorn as the web server
 # gem 'unicorn'
