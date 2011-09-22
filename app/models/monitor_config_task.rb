@@ -15,7 +15,7 @@ class MonitorConfigTask
       :bindwidth => {:bwDown => monitor_config.bandwidth},
       :browser => browser,
       :indexId => monitor_config_id.to_s,
-      :operations => 'webpage',
+      :operations => monitor_config.task_type,
       :bundle => false
     }
   end

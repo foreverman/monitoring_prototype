@@ -9,6 +9,7 @@ class MonitorsController < ApplicationController
   
   def create
     @monitor = MonitorConfig.new(params[:monitor])
+    current_user.monitors << @monitor
     if @monitor.save
       redirect_to monitor_path(@monitor)
     else

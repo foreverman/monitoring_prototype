@@ -1,7 +1,7 @@
 module Sample
 
   class SampleTypeError < StandardError;end
-  TYPES = %w{httpservice webpage error}
+  TYPES = %w{http webpage error}
 
   def self.from_http params, body_hash
     types = body_hash['messageTypes'] || [body_hash.keys.first]

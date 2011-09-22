@@ -20,7 +20,7 @@ class MonitorConfig
 
   #TODO
   def task_type
-    "httpservice"
+    "http-get"
   end
 
   private

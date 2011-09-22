@@ -1,5 +1,5 @@
 module Sample
-  class Httpservice
+  class Http
     include MongoMapper::Document
 
     belongs_to :monitor_config
@@ -39,7 +39,7 @@ module Sample
 
     def store
       if save
-        HttpserviceDaily.store(self)
+        HttpDaily.store(self)
       end
     end
   end

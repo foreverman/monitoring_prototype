@@ -1,5 +1,5 @@
 module Sample
-  class HttpserviceDaily
+  class HttpDaily
     include MongoMapper::Document
 
     belongs_to :monitor_config
