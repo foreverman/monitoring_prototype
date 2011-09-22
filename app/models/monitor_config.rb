@@ -19,8 +19,12 @@ class MonitorConfig
   end
 
   #TODO
-  def task_type
+  def task_name
     "http-get"
+  end
+
+  def task_type
+    'http'
   end
 
   private

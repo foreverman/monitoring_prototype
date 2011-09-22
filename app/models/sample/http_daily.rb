@@ -18,19 +18,19 @@ module Sample
 
     key :sample_count, Integer, :default => 0
 
-    def self.store(httpservice)
+    def self.store(http)
       inc = {
-        :connection => httpservice.connection, 
-        :first_byte => httpservice.first_byte, 
-        :last_byte => httpservice.last_byte, 
-        :size => httpservice.size,
+        :connection => http.connection, 
+        :first_byte => http.first_byte, 
+        :last_byte => http.last_byte, 
+        :size => http.size,
         :sample_count => 1
       }
       self.collection.update(
         {
-          :monitor_config_id => httpservice.monitor_config_id, 
-          :location => httpservice.location,
-          :timestamp => Time.at(httpservice.timestamp).utc.beginning_of_day.to_i
+          :monitor_config_id => http.monitor_config_id, 
+          :location => http.location,
+          :timestamp => Time.at(http.timestamp).utc.beginning_of_day.to_i
         },
         {'$inc' => inc},
         :upsert => true
