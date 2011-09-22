@@ -71,4 +71,6 @@ Monitoring::Application.routes.draw do
       get 'fetch'
     end
   end
+
+  resources :trendings
 end

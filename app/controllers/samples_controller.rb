@@ -10,8 +10,8 @@ class SamplesController < ApplicationController
   def create
     body_str = request.body.read
     body_hash = ActiveSupport::JSON.decode(body_str)
-    sample = Sample.from_http(params, body_hash)
-    sample.store
+    samples = Sample.from_http(params, body_hash)
+    samples.each {|sample| sample.store}
     render :json => {:code => 'OK', :tasks => []}, :status => 200
   end
 
