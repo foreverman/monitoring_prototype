@@ -4,7 +4,7 @@ class SamplesController < ApplicationController
   # :location => String, eg: 'aws-us-east'
   # :type => Array, eg: ['webpage', 'http'] or ['webpage] -- right now we can ignor this parameter
   def fetch
-    render :json => { :code => 'OK', :tasks => MonitorConfig.next!(params)}, :status => 200
+    render :json => { :code => 'OK', :tasks => MonitorConfigTask.next!(params)}, :status => 200
   end
 
   def create

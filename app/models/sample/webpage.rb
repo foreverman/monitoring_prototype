@@ -14,7 +14,7 @@ module Sample
     key :time_to_interact
     key :first_paint
 
-    validates_presence_of :url, :location, :browser, :bandwidth, :monitor_config_id
+    validates_presence_of :url, :location, :browser, :monitor_config_id
 
     key :timestamp, Integer 
 
@@ -30,7 +30,8 @@ module Sample
         :url       => params['u'],
         :location  => params['l'],
         :browser   => params['b'],
-        :bandwidth => params['w']}.merge(metrics)
+        :bandwidth => params['w'],
+        :monitor_config_id => params['i'].to_mongoid}.merge(metrics)
       ) 
     end
 

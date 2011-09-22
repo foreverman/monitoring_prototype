@@ -12,10 +12,11 @@ class MonitorConfigTask
   def as_json
     {
       :url => monitor_config.url,
-      :task => 'webpage',
-      :id => id,
-      :network_connection => monitor_config.bandwidth,
-      :browser => browser
+      :bindwidth => {:bwDown => monitor_config.bandwidth},
+      :browser => browser,
+      :indexId => monitor_config_id.to_s,
+      :operations => 'webpage',
+      :bundle => false
     }
   end
 
@@ -25,8 +26,8 @@ class MonitorConfigTask
       begin
         task = self.collection.find_and_modify(
           :query  => {
-            "location" => params[:location],
-            "browser" => {'$in' => params[:browsers]},
+            "location" => params['l'],
+            #"browser" => {'$in' => params[:browsers]},
             "scheduling" => false,
             "next_scheduled_at" => {"$lt" => Time.now.utc}
           },
@@ -34,7 +35,7 @@ class MonitorConfigTask
           :update => { '$set' => { "scheduling" => true } }
         )
       rescue Mongo::OperationFailure => e
-        return nil
+        return []
       end
 
       # calculate after scheduled data, update and unlock the task
@@ -46,13 +47,13 @@ class MonitorConfigTask
           :sort   => [ ["next_scheduled_at", 1] ], # ascending
           :update => {"$set" => update_params }
         )
-        task.as_json
+        [task.as_json]
       rescue Exception => e
         self.collection.find_and_modify(
           :query => {"_id" => task.id},
           :update => {"$set" => {"scheduling" => false}}
         )
-        nil
+        []
       end
     end
   end
