@@ -4,11 +4,18 @@ class MonitorsController < ApplicationController
   end
   
   def new
-    @monitor = MonitorConfig.new
+    @monitor_http = MonitorHttp.new
+    @monitor_webpage = MonitorWebpage.new
   end
   
   def create
-    @monitor = MonitorConfig.new(params[:monitor])
+    @monitor = case params[:type]
+    when 'http'
+        MonitorHttp.new(params[:monitor])
+    when 'webpage'
+        MonitorWebpage.new(params[:monitor])
+    end
+    
     if @monitor.save
       redirect_to monitor_path(@monitor)
     else

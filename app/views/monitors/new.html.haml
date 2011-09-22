@@ -1,4 +1,6 @@
-= form_for @monitor, :as => :monitor, :url => monitors_path(@monitor) do |f|
+Create Webpage Monitor
+= form_for @monitor_webpage, :as => :monitor, :url => monitors_path(@monitor_webpage) do |f|
+  %input{:type => 'hidden', :name => 'type', :value => 'webpage'}
   = f.label :name, "Name:"
   = f.text_field :name
   %br
@@ -27,4 +29,33 @@
   
   = f.submit
   
+%hr
+
+Create Http Service Monitor
+= form_for @monitor_http, :as => :monitor, :url => monitors_path(@monitor_http) do |f|
+  %input{:type => 'hidden', :name => 'type', :value => 'http'}
+  = f.label :name, "Name:"
+  = f.text_field :name
+  %br
   
+  = f.label :url, "URL:"
+  = f.text_field :url
+  %br
+
+  = f.label :frequency, "Frequency:"
+  = f.text_field :frequency
+  %br
+  
+  %input{:type => 'checkbox', :name => "monitor[locations][]", :value => "aws-us-east"}
+  %label USA East
+  %input{:type => 'checkbox', :name => "monitor[locations][]", :value => "aws-us-west"}
+  %label USA West
+  %br
+  
+  = f.label :bandwidth, "Bandwidth:"
+  = f.text_field :bandwidth
+  %br
+  
+  = f.submit
+  
+%hr
