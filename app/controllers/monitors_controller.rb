@@ -16,6 +16,7 @@ class MonitorsController < ApplicationController
         MonitorWebpage.new(params[:monitor])
     end
     
+    current_user.monitors << @monitor
     if @monitor.save
       redirect_to monitor_path(@monitor)
     else

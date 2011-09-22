@@ -26,7 +26,7 @@ module Sample
       metrics = parse_metrics_from(body)
 
       self.new({
-        :timestamp => params['t'],
+        :timestamp => params['t'].to_f/1000,
         :url       => params['u'],
         :location  => params['l'],
         :browser   => params['b'],

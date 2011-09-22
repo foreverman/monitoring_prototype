@@ -14,4 +14,13 @@ class MonitorConfig
   def location_frequency
     (frequency * locations.count).seconds
   end
+  
+  #TODO
+  def task_name
+    "http-get"
+  end
+
+  def task_type
+    'http'
+  end
 end

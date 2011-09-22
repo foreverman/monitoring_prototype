@@ -13,7 +13,14 @@ class MonitorConfigTask
   delegate :location_frequency, :bandwidth, :to => :monitor_config
 
   def as_json
-    monitor_config.as_task
+    {
+      :url => monitor_config.url,
+      :bindwidth => {:bwDown => monitor_config.bandwidth},
+      :browser => browser,
+      :indexId => monitor_config_id.to_s,
+      :operations => monitor_config.task_name,
+      :bundle => false
+    }
   end
 
   class << self
