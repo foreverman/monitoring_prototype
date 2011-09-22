@@ -36,5 +36,28 @@ module Sample
         :upsert => true
       )
     end
+
+    def self.average_metrics(monitor_config, options = {})
+      start_at = options[:start_at] || 1.months.ago.utc.beginning_of_day.to_i
+      end_at = options[:end_at] || Time.now.utc.beginning_of_day.to_i
+      metrics = options[:metrics] || %w{connection first_byte last_byte size}
+      other_fields = ['sample_count'] 
+      samples = where(
+        :monitor_config_id => monitor_config.id, 
+        :timestamp => {'$lte' => end_at, '$gte' => start_at}).fields(metrics + other_fields).all
+
+      total_sample_count = 0
+      sum_hash = 
+      samples.inject({}) do |result, sample|
+        total_sample_count += sample.sample_count
+        metrics.each do |m|
+          result[m] ||= 0
+          result[m] += sample.send(m)
+        end
+        result
+      end
+      sum_hash.each {|k, v| sum_hash[k] = sum_hash[k].to_f / total_sample_count}
+      sum_hash
+    end
   end
 end

@@ -1,0 +1,68 @@
+= render "monitor"
+%h2 Averages
+%table{:border => 0}
+  %thead
+    %tr
+      %th DNS Time
+      %th Connection Time
+      %th Blocking Time
+      %th Sending Time
+      %th Waiting Time
+      %th Receiving Time
+      %th Time to First Byte
+      %th Time to Last Byte
+  %tbody
+    %tr
+      %td 
+      %td
+        = @averages['connection']
+      %td 
+      %td 
+      %td 
+      %td 
+      %td 
+        = @averages['first_byte']
+      %td 
+        = @averages['last_byte']
+
+%h2 Trending
+%h2 Data Samples
+%form
+  Show
+  %select
+    %option DNS Time
+    %option Connection Time
+    %option Blocking Time 
+    %option Sending Time 
+    %option Server Waiting Time 
+    %option Time to First Byte
+    %option Time to Last Byte
+    %option Download Size 
+    %option Availability 
+  for samples from
+  %select 
+    %option Boston
+    %option Singapore 
+    %option Tokyo 
+    %option London 
+  = render '/shared/date_picker' 
+  %input{:type => 'submit', :value => 'Update'} 
+
+%table{:border => 1}
+  %thead
+    %tr
+      %th Time
+      %th Location 
+      %th Bindwidth
+      %th DNS Time(ms) 
+      %th Status 
+      %th Edit
+  %tbody
+    - @samples.each do |sample|
+      %tr
+        %td #{sample.timestamp}
+        %td #{sample.location}
+        %td #{sample.bandwidth}
+        %td #{sample.connection}
+        %td #{sample.status}
+        %td 

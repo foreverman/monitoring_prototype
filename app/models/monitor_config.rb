@@ -18,6 +18,11 @@ class MonitorConfig
     (frequency * locations.count).seconds
   end
 
+  #TODO
+  def task_type
+    "httpservice"
+  end
+
   private
   def initialize_tasks
     unless locations.empty?

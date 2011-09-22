@@ -1,0 +1,6 @@
+View data collected from
+%select
+  - @monitors.each do |monitor|
+    %option "#{monitor.name}"
+
+= render '/shared/date_picker'
