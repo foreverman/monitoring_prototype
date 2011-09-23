@@ -69,6 +69,6 @@
         %td #{sample.status}
         %td 
 %script
-  - @samplesdaily = @samples_daily.map {|sample| [sample.timestamp, sample.connection]}
+  - @samplesdaily = @samples_daily.map {|sample| [sample.timestamp, sample.connection.to_i]}.inject({}){|result, item| result[item[0]] ||= 0; result[item[0]] += item[1]; result }.map{|k, v| [k, v]}.sort
   data = #{@samplesdaily.to_json}
 = javascript_include_tag "trendings"
