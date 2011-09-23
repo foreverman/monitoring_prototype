@@ -10,7 +10,7 @@ class MonitorHttp < MonitorConfig
       :url => url,
       :bindwidth => {:bwDown => bandwidth},
       :indexId => id,
-      :operations => type,
+      :operations => "#{type}-#{method.downcase}",
       :bundle => false
     }
   end
