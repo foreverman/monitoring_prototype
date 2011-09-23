@@ -25,6 +25,7 @@ class MonitorConfigTask
             "location" => params['l'],
             'scheduling' => false,
             'next_scheduled_at' => {'$lt' => Time.now.utc},
+            'browser' => {'$in' => [nil, params['b']].uniq}
             # '$or' => [
             #       { 'type' => {'$in' => params['o'].split(',') } },
             #       { 'type' => {'$in' => params['o'].split(',') }
