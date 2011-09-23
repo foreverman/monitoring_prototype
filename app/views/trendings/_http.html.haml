@@ -1,6 +1,6 @@
 = render "monitor"
 %h2 Averages
-%table{:border => 0}
+%table{:border => 1}
   %thead
     %tr
       %th DNS Time
@@ -15,17 +15,19 @@
     %tr
       %td 
       %td
-        = @averages['connection']
+        = @averages['connection'].to_i
       %td 
       %td 
       %td 
       %td 
       %td 
-        = @averages['first_byte']
+        = @averages['first_byte'].to_i
       %td 
-        = @averages['last_byte']
+        = @averages['last_byte'].to_i
 
 %h2 Trending
+.graph{:style => "width:980px;height:270px"}
+
 %h2 Data Samples
 %form
   Show
@@ -66,3 +68,7 @@
         %td #{sample.connection}
         %td #{sample.status}
         %td 
+%script
+  - @samplesdaily = @samples_daily.map {|sample| [sample.timestamp, sample.connection]}
+  data = #{@samplesdaily.to_json}
+= javascript_include_tag "trendings"

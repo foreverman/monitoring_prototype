@@ -42,5 +42,9 @@ module Sample
 
     end
 
+    def self.average_metrics(monitor_config, options = {})
+      {}
+    end
+
   end
 end
