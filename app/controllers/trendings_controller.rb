@@ -7,6 +7,6 @@ class TrendingsController < ApplicationController
     @monitors = current_user.monitors
     @averages = sample_daily_class.average_metrics(@monitor_config)
     @samples_daily = sample_daily_class.all(:monitor_config_id => @monitor_config.id)
-    @samples = sample_class.all 
+    @samples = sample_class.all(:monitor_config_id => @monitor_config.id)
   end
 end
