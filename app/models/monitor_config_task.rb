@@ -9,47 +9,57 @@ class MonitorConfigTask
   key :browser
   key :type, String
   key :scheduling, Boolean, :default => false
-  
+
   delegate :location_frequency, :bandwidth, :to => :monitor_config
+
+  scope :illegal, where(:scheduling => true)
 
   def as_json
     monitor_config.as_task
   end
 
+  def get_next_scheduled_time
+    last_time, now = next_scheduled_at, Time.now.utc
+    while (next_time = last_time.since(location_frequency)) <= now
+      #add logic for processing missing sample points
+      last_time = next_time
+    end
+    next_time
+  end
+
+  # class methods
   class << self
-    def next!(params)
-      # add lock to the task
+    def next!(location, browsers, operations)
+      tasks = []
       begin
+        # add lock to the task
         task_doc = self.collection.find_and_modify(
           :query  => {
-            "location" => params['l'],
+            "location" => location,
             'scheduling' => false,
             'next_scheduled_at' => {'$lt' => Time.now.utc},
-            'browser' => {'$in' => [nil, params['b']].uniq}
-            # '$or' => [
-            #       { 'type' => {'$in' => params['o'].split(',') } },
-            #       { 'type' => {'$in' => params['o'].split(',') }
-            #         #, 'browser' => {'$in' => params['browsers']} 
-            #       }
-            #     ]
+            '$or' => [
+                { :type => {'$in' => operations & ['http']} },                          #for http task
+                { :browser => browsers, :type => {'$in' => operations & ['webpage']} }  #for webpage task
+              ]
           },
           :sort   => [ ["next_scheduled_at", 1] ], # ascending
           :update => { '$set' => { "scheduling" => true } }
         )
-      rescue Mongo::OperationFailure => e
-        return []
-      end
 
-      # calculate after scheduled data, update and unlock the task
-      begin
-        task = self.find(task_doc['_id'])
-        update_params = {"scheduling" => false, "next_scheduled_at" => task.next_scheduled_at + task.location_frequency}
-        task.update_attributes(update_params)
-        [task.as_json]
-      rescue Exception => e
-        self.collection.update({'_id' => task_doc['_id']}, {'$set' => { "scheduling" => false }})
-        []
+        # calculate after scheduled data, update and unlock the task
+        if task_doc && task_doc['_id']
+          begin
+            task = self.find(task_doc['_id'])
+            task.update_attributes(:scheduling => false, :next_scheduled_at => task.get_next_scheduled_time)
+            tasks << task.as_json
+          rescue Exception => e
+            self.collection.update({'_id' => task_doc['_id']}, {'$set' => { "scheduling" => false }})
+          end
+        end
+      rescue Mongo::OperationFailure => e
       end
+      tasks
     end
   end
 end
