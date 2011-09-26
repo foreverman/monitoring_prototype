@@ -15,4 +15,10 @@ class MonitorConfig
     (frequency * locations.count).seconds
   end
 
+  def schedule_realtime
+    tasks.not_realtime.each do |task|
+      config = task.as_config
+      tasks.create(config.merge(:next_scheduled_at => Time.now.utc, :realtime => true)) if tasks.realtime.where(config).empty?
+    end
+  end
 end

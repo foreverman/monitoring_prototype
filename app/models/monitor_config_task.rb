@@ -5,7 +5,7 @@ class MonitorConfigTask
 
   key :location
   key :next_scheduled_at
-  key :realtime
+  key :realtime, Boolean, :default => false
   key :browser
   key :type, String
   key :scheduling, Boolean, :default => false
@@ -13,15 +13,26 @@ class MonitorConfigTask
   delegate :location_frequency, :bandwidth, :to => :monitor_config
 
   scope :illegal, where(:scheduling => true)
+  scope :realtime, where(:realtime => true)
+  scope :not_realtime, where(:realtime => false)
+  scope :ordered, sort(:next_scheduled_at)
 
   def as_json
     monitor_config.as_task
   end
 
+  def as_config
+    {
+      :location => location,
+      :browser => browser,
+      :type => type
+    }
+  end
+
   def get_next_scheduled_time
     last_time, now = next_scheduled_at, Time.now.utc
     while (next_time = last_time.since(location_frequency)) <= now
-      #add logic for processing missing sample points
+      #add logic for processing missing sample points, eg: Rails.logger.debug "#{last_time} sample missing"
       last_time = next_time
     end
     next_time
@@ -43,7 +54,7 @@ class MonitorConfigTask
                 { :browser => browsers, :type => {'$in' => operations & ['webpage']} }  #for webpage task
               ]
           },
-          :sort   => [ ["next_scheduled_at", 1] ], # ascending
+          :sort   => [ [:realtime, -1], ["next_scheduled_at", 1] ], #fetch realtime task first
           :update => { '$set' => { "scheduling" => true } }
         )
 
@@ -51,8 +62,12 @@ class MonitorConfigTask
         if task_doc && task_doc['_id']
           begin
             task = self.find(task_doc['_id'])
-            task.update_attributes(:scheduling => false, :next_scheduled_at => task.get_next_scheduled_time)
             tasks << task.as_json
+            if task.realtime?
+              task.destroy
+            else
+              task.update_attributes(:scheduling => false, :next_scheduled_at => task.get_next_scheduled_time)
+            end
           rescue Exception => e
             self.collection.update({'_id' => task_doc['_id']}, {'$set' => { "scheduling" => false }})
           end
