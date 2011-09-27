@@ -53,7 +53,7 @@ module Sample
         total_sample_count += sample.sample_count
         metrics.each do |m|
           result[m] ||= 0
-          result[m] += sample.send(m)
+          result[m] += sample.send(m).value
         end
         result
       end
