@@ -9,7 +9,7 @@
             %th Frequency
             %th Browser
             %th Locations
-            %th Show
+            %th Trending
             %th Edit
         %tbody
           - @monitors.each do |monitor|
@@ -20,13 +20,24 @@
               %td #{monitor.browser rescue nil}
               %td #{monitor.locations.join(',')}
               %td 
-                = link_to "Show", trending_path(monitor)
+                = link_to "Trending", trending_path(monitor)
               %td 
                 = link_to "Edit", edit_monitor_path(monitor)
     - else
       There is no monitors now.
 
-    = link_to "add monitor", new_monitor_path
+    %br
+    %br
+    
+    %form{:method => "get", :action => new_monitor_path}
+      %label
+        %input{:type => 'radio', :name => 'operation', :value => 'webpage', :checked => true }
+        Webpage
+      %label
+        %input{:type => 'radio', :name => 'operation', :value => 'http' }
+        Http service
+      %input{:type => 'submit', :value => "setup a monitor"}
+
   %div.ui-layout-east
 %div.ui-layout-south
 

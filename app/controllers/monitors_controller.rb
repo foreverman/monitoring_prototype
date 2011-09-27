@@ -4,16 +4,20 @@ class MonitorsController < ApplicationController
   end
   
   def new
-    @monitor_http = MonitorHttp.new
-    @monitor_webpage = MonitorWebpage.new
+    @monitor = case params[:operation]
+    when 'http'
+        HttpMonitor.new
+    when 'webpage'
+        WebpageMonitor.new
+    end
   end
   
   def create
-    @monitor = case params[:type]
+    @monitor = case params[:operation]
     when 'http'
-        MonitorHttp.new(params[:monitor])
+        HttpMonitor.new(params[:monitor])
     when 'webpage'
-        MonitorWebpage.new(params[:monitor])
+        WebpageMonitor.new(params[:monitor])
     end
     
     current_user.monitors << @monitor

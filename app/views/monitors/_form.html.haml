@@ -1,0 +1,35 @@
+Create a #{form.operation} monitor
+= form_for form, :as => :monitor, :url => form.new_record? ? monitors_path(form) : monitor_path(form) do |f|
+  %input{:type => 'hidden', :name => 'operation', :value => form.operation}
+  = f.label :name, "Name:"
+  = f.text_field :name
+  %br
+
+  = f.label :url, "URL:"
+  = f.text_field :url
+  %br
+
+  = f.label :frequency, "Frequency:"
+  = f.text_field :frequency
+  %br
+
+  - if form.operation == 'webpage'
+    = f.radio_button :browser, 'firefox'
+    = f.label :browser, "Firefox"
+    = f.radio_button :browser, 'ie'
+    = f.label :browser, "Internet Explorer"
+    %br
+
+  %label
+    = check_box_tag "monitor[locations][]", "aws-us-east", form.locations.empty? || form.locations.include?('aws-us-east')
+    USA East
+  %label
+    = check_box_tag "monitor[locations][]", "aws-us-west", form.locations.include?('aws-us-west')
+    USA West
+  %br
+
+  = f.label :bandwidth, "Bandwidth:"
+  = f.text_field :bandwidth
+  %br
+
+  = f.submit

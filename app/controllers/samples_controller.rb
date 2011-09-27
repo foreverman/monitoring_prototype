@@ -1,8 +1,8 @@
 class SamplesController < ApplicationController
   # expect parameters
-  # :browsers => Array, eg: ["ie", "firefox"] or ['firefox']
-  # :location => String, eg: 'aws-us-east'
-  # :type => Array, eg: ['webpage', 'http'] or ['webpage] -- right now we can ignor this parameter
+  # :b => String, eg: 'firefox' -- browsers
+  # :l => String, eg: 'aws-us-east' -- location
+  # :o => String, eg: 'webpage,http' or 'webpage -- operations
   def fetch
     render :json => { :code => 'OK', :tasks => MonitorConfigTask.next!(params['l'], params['b'], params['o'].split(','))}, :status => 200
   end

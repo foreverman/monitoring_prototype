@@ -1,7 +1,7 @@
-class MonitorWebpage < MonitorConfig
+class WebpageMonitor < MonitorConfig
   
   key :url, String, :required => true
-  key :browser, String, :in => ['firefox', 'ie', 'chrome'] :default => 'firefox'
+  key :browser, String, :in => ['firefox', 'ie', 'chrome'], :default => 'firefox'
   key :bandwidth
   
   def as_task

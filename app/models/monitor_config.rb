@@ -22,20 +22,24 @@ class MonitorConfig
       tasks.create(config.merge(:next_scheduled_at => Time.now.utc, :realtime => true)) if tasks.realtime.where(config).empty?
     end
   end
+
+  def operation
+    _type.underscore.split('_').first
+  end
   
   protected
   def initialize_tasks
     unless locations.empty?
       current_time = Time.now.utc
       locations.each_with_index do |location, index|
-        add_task(default_task_options.merge(:location => location, :next_scheduled_at => current_time + (index * frequency).seconds)
+        add_task(default_task_options.merge(:location => location, :next_scheduled_at => current_time + (index * frequency).seconds))
       end
     end
   end
   
   def update_tasks
-    alters = changes.inspect
-        
+    alters = changes
+
     if alters.has_key?('locations') || alters.has_key?('frequency')
       base_time = calculate_next_task_time
       if alters.has_key?('locations')
@@ -58,25 +62,21 @@ class MonitorConfig
   
   # FIXME: how to handle the removed tasks, right now just delete
   def delete_tasks conditions
-    tasks.where(conditions).delete_all
+    tasks.where(conditions).map(&:destroy)
   end
   
   def reschedule_tasks base_time = Time.now.utc
     tasks.not_realtime.each_with_index do |task, index|
-      task.next_scheduled_at = base_time + (index * frequency).seconds
+      task.update_attribute(:next_scheduled_at, base_time + (index * frequency).seconds)
     end
   end
   
   def calculate_next_task_time
-    [tasks.not_realtime.ordered.first - frequency_was + frequency, Time.now.utc].max
+    [tasks.not_realtime.ordered.first.next_scheduled_at - frequency_was + frequency, Time.now.utc].max
   end
 
   # should be overrided by inheritance class if more options needed
   def default_task_options
     {:reatime => false}
-  end
-  
-  def operation
-    _type.underscore.split('_').first
   end
 end

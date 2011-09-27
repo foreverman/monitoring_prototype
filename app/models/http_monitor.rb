@@ -1,4 +1,4 @@
-class MonitorHttp < MonitorConfig
+class HttpMonitor < MonitorConfig
   
   key :url
   key :method, String, :in => [ 'GET', 'POST', 'PUT', 'DELETE'], :default => 'GET'
