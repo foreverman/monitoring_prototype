@@ -7,7 +7,6 @@ class MonitorConfigTask
   key :next_scheduled_at
   key :realtime, Boolean, :default => false
   key :browser
-  key :type, String
   key :scheduling, Boolean, :default => false
 
   delegate :location_frequency, :bandwidth, :to => :monitor_config
@@ -24,8 +23,7 @@ class MonitorConfigTask
   def as_config
     {
       :location => location,
-      :browser => browser,
-      :type => type
+      :browser => browser
     }
   end
 
@@ -42,6 +40,7 @@ class MonitorConfigTask
   class << self
     def next!(location, browsers, operations)
       tasks = []
+      operations = operations.map{|o| "#{o}_monitor".camelize }
       begin
         # add lock to the task
         task_doc = self.collection.find_and_modify(
@@ -49,9 +48,10 @@ class MonitorConfigTask
             "location" => location,
             'scheduling' => false,
             'next_scheduled_at' => {'$lt' => Time.now.utc},
+            'monitor_config_type' => {'$in' => operations},
             '$or' => [
-                { :type => {'$in' => operations & ['http']} },                          #for http task
-                { :browser => browsers, :type => {'$in' => operations & ['webpage']} }  #for webpage task
+                { :browser => nil },      #for http task
+                { :browser => browsers }  #for webpage task
               ]
           },
           :sort   => [ [:realtime, -1], ["next_scheduled_at", 1] ], #fetch realtime task first
