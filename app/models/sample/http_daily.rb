@@ -1,6 +1,8 @@
 module Sample
   class HttpDaily
     include MongoMapper::Document
+    include Attribute
+    include SLA
 
     belongs_to :monitor_config
 
@@ -9,10 +11,7 @@ module Sample
     key :browser,  String
     key :bandwidth,String
 
-    key :connection
-    key :first_byte
-    key :last_byte
-    key :size
+    numeric_attribute :connection, :first_byte, :last_byte, :size
 
     key :timestamp, Integer
 
@@ -20,12 +19,14 @@ module Sample
 
     def self.store(http)
       inc = {
-        :connection => http.connection, 
-        :first_byte => http.first_byte, 
-        :last_byte => http.last_byte, 
-        :size => http.size,
-        :sample_count => 1
+        'connection.value' => http.connection, 
+        'first_byte.value' => http.first_byte, 
+        'last_byte.value' => http.last_byte, 
+        'size.value' => http.size,
+        'sample_count' => 1
       }
+      compute_sla http, inc
+      
       self.collection.update(
         {
           :monitor_config_id => http.monitor_config_id, 
@@ -52,7 +53,7 @@ module Sample
         total_sample_count += sample.sample_count
         metrics.each do |m|
           result[m] ||= 0
-          result[m] += sample.send(m)
+          result[m] += sample.send(m).value
         end
         result
       end
