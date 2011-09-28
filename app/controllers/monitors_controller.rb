@@ -13,6 +13,12 @@ class MonitorsController < ApplicationController
   end
   
   def create
+    if params[:monitor][:performance_sla][:percent]
+      params[:monitor][:performance_sla][:percent] = params[:monitor][:performance_sla][:percent].to_f 
+    end
+    if params[:monitor][:performance_sla][:seconds]
+      params[:monitor][:performance_sla][:seconds] = params[:monitor][:performance_sla][:seconds].to_i 
+    end
     @monitor = case params[:operation]
     when 'http'
         HttpMonitor.new(params[:monitor])

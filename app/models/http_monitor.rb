@@ -13,4 +13,8 @@ class HttpMonitor < MonitorConfig
       :bundle => false
     }
   end
+
+  def metrics
+    %w{connection first_byte last_byte size}
+  end
 end

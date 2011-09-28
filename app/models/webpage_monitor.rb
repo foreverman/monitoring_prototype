@@ -15,6 +15,10 @@ class WebpageMonitor < MonitorConfig
     }
   end
 
+  def metrics
+    %w{time_to_title time_to_display time_to_interact first_paint}
+  end
+
   protected
   def default_task_options
     super.merge(:browser => browser)

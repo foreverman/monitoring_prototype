@@ -31,5 +31,17 @@ Create a #{form.operation} monitor
   = f.label :bandwidth, "Bandwidth:"
   = f.text_field :bandwidth
   %br
+  %hr
+  = f.label :availability_sla, "Service availability must be no less than "
+  = f.text_field :availability_sla, :value => 0.9
 
+  %br
+  = f.text_field :performance_sla, :name => "monitor[performance_sla][percent]", :value => 0.85
+  = f.label :performance_sla, " of "
+  = select_tag "monitor[performance_sla][metric]", options_for_select(@monitor.metrics)
+  = f.label :performance_sla, " must be less than "
+  = f.text_field :performance_sla, :name => "monitor[performance_sla][seconds]", :value => 500
+  milliseconds
+
+  %br
   = f.submit
