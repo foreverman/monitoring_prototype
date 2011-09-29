@@ -14,6 +14,7 @@ class MonitorConfig
   # eg. performance_sla = {'percent' => 0.85, 'metric' => 'dns_time', 'seconds' => 5}
   key :performance_sla,  Hash
 
+  one :issue
   many :tasks, :class_name => "MonitorConfigTask", :as => :monitor_config
 
   def location_frequency

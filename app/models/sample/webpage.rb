@@ -1,6 +1,7 @@
 module Sample
   class Webpage 
     include MongoMapper::Document
+    include Persistence
 
     belongs_to :monitor_config
 
@@ -94,10 +95,5 @@ module Sample
       body['error']['meta-data']
     end
 
-    def store
-      if save
-        WebpageDaily.store(self)
-      end
-    end
   end
 end

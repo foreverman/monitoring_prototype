@@ -1,6 +1,7 @@
 module Sample
   class Http
     include MongoMapper::Document
+    include Persistence
 
     belongs_to :monitor_config
 
@@ -37,10 +38,5 @@ module Sample
       )
     end
 
-    def store
-      if save
-        HttpDaily.store(self)
-      end
-    end
   end
 end

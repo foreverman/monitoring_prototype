@@ -46,7 +46,7 @@ module Sample
           }
 
         valid_samples_count = self.name[0..-6].constantize.count(query)
-        error_samples_count = Sample::Error.count query.merge({:type => task_name})
+        error_samples_count = Sample::Error.count query.merge({:error_type => task_name})
         valid_samples_count.to_f / (valid_samples_count + error_samples_count)
       end
 
