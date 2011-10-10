@@ -30,6 +30,7 @@ module Sample
     end
 
     def store
+      save
     end
 
   end

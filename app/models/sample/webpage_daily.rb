@@ -25,6 +25,10 @@ module Sample
         "time_to_title.value" => webpage.time_to_title, 
         "time_to_interact.value" => webpage.time_to_interact, 
         "first_paint.value" => webpage.first_paint,
+        "time_to_display.sum_of_sqr" => webpage.time_to_display**2, 
+        "time_to_title.sum_of_sqr" => webpage.time_to_title**2, 
+        "time_to_interact.sum_of_sqr" => webpage.time_to_interact**2, 
+        "first_paint.sum_of_sqr" => webpage.first_paint**2,
         "yottaa_score" => webpage.yottaa_score,
         "sample_count" => 1,
       }

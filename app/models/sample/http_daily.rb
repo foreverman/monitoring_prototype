@@ -23,6 +23,10 @@ module Sample
         'first_byte.value' => http.first_byte, 
         'last_byte.value' => http.last_byte, 
         'size.value' => http.size,
+        'connection.sum_of_sqr' => http.connection**2,
+        'first_byte.sum_of_sqr' => http.first_byte**2,
+        'last_byte.sum_of_sqr' => http.last_byte**2, 
+        'size.sum_of_sqr' => http.size**2,
         'sample_count' => 1
       }
       compute_sla http, inc

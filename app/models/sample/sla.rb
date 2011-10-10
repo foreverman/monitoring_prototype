@@ -10,9 +10,16 @@ module Sample
       end
 
       def compute_sla(sample, inc = {})
-        if !sample.monitor_config.performance_sla.blank? && 
-            (sample.send(sample.monitor_config.performance_sla[:metric]) < sample.monitor_config.performance_sla[:seconds])
-          inc["#{sample.monitor_config.performance_sla[:metric]}.count_of_sla"] = 1 
+        mc = sample.monitor_config
+        if !mc.performance_sla.blank?
+          mean, standard_deviation = mean_and_standard_deviation(mc)
+          metric = sample.send(mc.performance_sla[:metric])
+          metric_standard = (metric - mean).to_f / standard_deviation
+         
+          probability = StandardNormalDistribution.probability_of_lte(metric_standard)
+          if probability < mc.performance_sla[:percent]
+            inc["#{mc.performance_sla[:metric]}.count_of_sla"] = 1 
+          end
         end
       end
 
@@ -67,7 +74,31 @@ module Sample
         success_days.to_f / samples.count
       end
 
+      def mean_and_standard_deviation(monitor_config, options = {})
+        start_at, end_at = prepare_timespan options
+        query = {
+          :monitor_config_id => monitor_config.id,
+          :timestamp => {'$lt' => end_at, '$gte' => start_at}
+        }
+        metric = monitor_config.performance_sla[:metric]
+        other_fields = ['sample_count'] 
+        samples = where(query).fields([metric] + other_fields).all
+
+        return [0, 0] if samples.empty?
+        sum_metric = samples.map{|s| s.send(metric).value}.sum
+        count_metric = samples.map{|s| s.sample_count}.sum
+        mean = sum_metric.to_f / count_metric
+
+        sum_of_square = samples.map{|s| s.send(metric).sum_of_sqr}.sum
+        standard_deviation = std_deviation(count_metric, sum_metric, sum_of_square)
+        [mean, standard_deviation]
+      end
+
       protected
+      def std_deviation count, sum, sum_of_sqr
+        Math.sqrt(((count * sum_of_sqr) - (sum**2)).to_f / (count * (count-1)))
+      end
+
       def prepare_timespan options = {}
         start_at = options[:start_at] || 1.months.ago.utc.beginning_of_day.to_i
         end_at = options[:end_at] || Time.now.utc.end_of_day.to_i

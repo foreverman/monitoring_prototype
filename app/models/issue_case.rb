@@ -13,5 +13,6 @@ class IssueCase
 
   #TODO check sample if meet it
   def check(sample)
+    sample.send(metric).send(action, target)
   end
 end
