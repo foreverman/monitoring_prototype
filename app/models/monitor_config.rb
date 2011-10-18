@@ -15,7 +15,7 @@ class MonitorConfig
   key :performance_sla,  Hash
 
   one :issue
-  many :tasks, :class_name => "MonitorConfigTask", :as => :monitor_config
+  many :tasks, :class_name => "MonitorConfigTask", :as => :monitor_config, :dependent => :destroy
 
   def location_frequency
     (frequency * locations.count).seconds
